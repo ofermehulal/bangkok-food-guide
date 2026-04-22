@@ -1,0 +1,132 @@
+{
+  "Saengchai Phochana": {
+    "hood": "Sukhumvit",
+    "desc": "Live mud crabs and Thai-Chinese seafood. Classic go-to after a night out.",
+    "meta": "762/5-7 Sukhumvit Rd, Khlong Tan, Khlong Toei 10110"
+  },
+  "Pier 21 Food Court (Terminal 21)": {
+    "hood": "Sukhumvit",
+    "desc": "Cheap, well-run Thai food court. Great intro to the classics — pad krapao, green curry, stir-fries.",
+    "meta": "Level 5, Terminal 21, 88 Sukhumvit Rd, Khlong Toei Nuea, Watthana 10110"
+  },
+  "Rung Rueang Pork Noodle": {
+    "hood": "Sukhumvit",
+    "desc": "Michelin-listed tom yum pork noodle soup (70฿). 6+ years in the Guide.",
+    "meta": "Sukhumvit Soi 26"
+  },
+  "Wattana Panich": {
+    "hood": "Sukhumvit",
+    "desc": "40-year-old simmered Chinese-style beef noodle broth (100฿). One of Bangkok's most iconic bowls.",
+    "meta": "336–338 Ekkamai Rd (Sukhumvit 63), Watthana 10110"
+  },
+  "Phed Mark": {
+    "hood": "Sukhumvit",
+    "desc": "Mark Wiens' restaurant — VERY spicy pad krapao. For chili lovers.",
+    "meta": "Ekkamai area"
+  },
+  "Baan E-sarn Muangyos": {
+    "hood": "Sukhumvit",
+    "desc": "Isan-style cooking in a pub atmosphere — food + beers. Don't overdo it on the salad for dinner.",
+    "meta": "Sukhumvit area"
+  },
+  "Little Bee Thai Crispy Crepe": {
+    "hood": "Sukhumvit",
+    "desc": "Made-to-order Thai crispy crepes (khanom buang). Michelin Bib 2021–2024. Try the Sweet Golden Egg Yolk Threads. Est. 1984.",
+    "meta": "EmQuartier / Phrom Phong"
+  },
+  "Ann Guay Tiew Kua Gai": {
+    "hood": "Chinatown",
+    "desc": "Fried rice noodles with chicken and egg (60฿). 5 years in the Michelin Guide.",
+    "meta": "Chinatown (Yaowarat)"
+  },
+  "Nai Ek Roll Noodle": {
+    "hood": "Chinatown",
+    "desc": "Clear Chinese-style pork noodle soup with crispy pork belly (100฿). 5 years in the Michelin Guide.",
+    "meta": "Chinatown (Yaowarat)"
+  },
+  "Kuay Jab Mr Joe": {
+    "hood": "Chinatown",
+    "desc": "Peppery rolled rice-noodle soup with crispy pork belly.",
+    "meta": "Chinatown (Yaowarat)"
+  },
+  "Kor Panich (K. Panich)": {
+    "hood": "Phra Nakhon",
+    "desc": "Legendary mango sticky rice — 130฿. 7 years in the Michelin Guide. Pair with a temple visit.",
+    "meta": "Phra Nakhon (near the temples)"
+  },
+  "Thipsamai Pad Thai": {
+    "hood": "Phra Nakhon",
+    "desc": "The most famous pad thai in Thailand — secret weapon is prawn oil. Try the Pad Thai Song-Kreung (ultimate version).",
+    "meta": "313–315 Maha Chai Rd, Samran Rat, Phra Nakhon 10200"
+  },
+  "Original Pad Kra Pao 1993": {
+    "hood": "Phra Nakhon",
+    "desc": "Pad krapao done the traditional way. Very affordable (~8–20 ILS/dish).",
+    "meta": "Phra Nakhon area"
+  },
+  "Shu Daxia Hot Pot": {
+    "hood": "Siam / Pathum Wan",
+    "desc": "Chinese-style hot pot with marbled beef rolls. Good group dinner.",
+    "meta": "Floor 6, MBK Center, 444 Phaya Thai Rd, Pathum Wan 10330"
+  },
+  "Kam's Roast": {
+    "hood": "Siam / Pathum Wan",
+    "desc": "1 Michelin Star for 11 years. Hong Kong–style roast duck (350฿ / quarter).",
+    "meta": "Central World, Siam"
+  },
+  "Jeh O Chula": {
+    "hood": "Chula / Samyan",
+    "desc": "Legendary late-night Mama tom yum noodles. Expect a queue — arrive early.",
+    "meta": "Chula / Samyan area"
+  },
+  "Jae Wan": {
+    "hood": "Chula / Samyan",
+    "desc": "Local Thai comfort food — a neighborhood favorite.",
+    "meta": "Chula / Samyan area"
+  },
+  "Sook Siam Market": {
+    "hood": "Khlong San / Icon Siam",
+    "desc": "Giant river prawns and regional Thai food stalls under one roof. A must for market lovers.",
+    "meta": "Icon Siam, Charoen Nakhon"
+  },
+  "Somboon Seafood": {
+    "hood": "Bang Rak",
+    "desc": "Bangkok's most famous curry crab (pu phad pong karee). Tourist-heavy but the crab is legit.",
+    "meta": "Surawong (also Chong Nonsi, Siam, CentralWorld)"
+  },
+  "Heng Chun Seng": {
+    "hood": "Bang Rak",
+    "desc": "Best beef soup in Bangkok. Order the hot pot soup with the mixed-meat plate.",
+    "meta": "Bang Rak area"
+  },
+  "Ginger Farm Kitchen": {
+    "hood": "Airport (BKK)",
+    "desc": "Farm-to-city Thai, zero MSG. Michelin Bib Gourmand 2020–2023. Convenient stop on arrival or departure.",
+    "meta": "Suvarnabhumi Airport (original in Chiang Mai)"
+  },
+  "Kin Kin Seafood": {
+    "hood": "Other",
+    "desc": "Mama Tom Yum noodles with raw egg yolks and crab fried rice. Pricey for Bangkok but quality is 10/10.",
+    "meta": "Bangkok (central)"
+  },
+  "Uncle Liu": {
+    "hood": "Other",
+    "desc": "Thai-Chinese fusion — stir-fries, fried rice with egg. Very local, hidden gem.",
+    "meta": "Bangkok"
+  },
+  "Hia Big 5 Pots": {
+    "hood": "Other",
+    "desc": "Pork wontons — a local favorite.",
+    "meta": "Bangkok"
+  },
+  "Good Taste Street Food": {
+    "hood": "Other",
+    "desc": "Thai classics — pad krapao, grilled pork, stir-fried morning glory. Solid repeat-visit spot.",
+    "meta": "Bangkok"
+  },
+  "Lay Lao": {
+    "hood": "Other",
+    "desc": "Comforting Hua Hin–style Thai. Michelin Bib Gourmand 2018–2025. Try the Deep Fried Sun Dried Pork Belly (185฿) and the whole young coconut.",
+    "meta": "Bangkok"
+  }
+}

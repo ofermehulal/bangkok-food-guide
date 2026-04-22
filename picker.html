@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photo Picker — Bangkok Food Guide</title>
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+    background: #0f0f0f;
+    color: #f0f0f0;
+    line-height: 1.5;
+    padding-bottom: 100px;
+  }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(15,15,15,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #222;
+    padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  header h1 {
+    font-size: 18px; font-weight: 700;
+    background: linear-gradient(135deg, #ff6b35 0%, #ffd166 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .progress { font-size: 13px; color: #888; }
+  .progress strong { color: #ffd166; }
+  button {
+    font: inherit; cursor: pointer;
+    padding: 8px 16px; border-radius: 8px; border: none;
+    font-weight: 600; font-size: 13px;
+  }
+  button.primary { background: #ff6b35; color: white; }
+  button.secondary { background: #222; color: #eee; border: 1px solid #333; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  .place { margin-bottom: 48px; scroll-margin-top: 80px; }
+  .place-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; margin-bottom: 10px;
+    padding-bottom: 10px; border-bottom: 1px solid #222;
+  }
+  .place-title { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .place-header h2 { font-size: 22px; font-weight: 700; }
+  .place-header .status { font-size: 12px; color: #666; white-space: nowrap; font-weight: 600; }
+  .place-header .status.partial { color: #ffb86b; }
+  .place-header .status.selected { color: #4ade80; }
+  .hood-chip {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    color: #ff9a6b;
+    background: rgba(255, 107, 53, 0.12);
+    border: 1px solid rgba(255, 107, 53, 0.35);
+    border-radius: 999px;
+  }
+  .place-desc {
+    font-size: 14px; color: #c8c8c8;
+    line-height: 1.5;
+    margin: 0 0 6px;
+    max-width: 780px;
+  }
+  .place-meta {
+    font-size: 12px; color: #777;
+    margin: 0 0 14px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .thumb {
+    position: relative;
+    aspect-ratio: 4/3;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #1a1a1a;
+    transition: transform 0.15s;
+    border: 3px solid transparent;
+  }
+  .thumb:hover { transform: scale(1.02); }
+  .thumb img {
+    width: 100%; height: 100%; object-fit: cover;
+    display: block;
+  }
+  .thumb.selected {
+    border-color: #ff6b35;
+    box-shadow: 0 0 0 2px #0f0f0f, 0 0 0 5px #ff6b35;
+  }
+  .thumb .check {
+    position: absolute; top: 8px; right: 8px;
+    width: 28px; height: 28px;
+    background: #ff6b35; color: white;
+    border-radius: 50%;
+    display: none;
+    align-items: center; justify-content: center;
+    font-size: 16px; font-weight: bold;
+  }
+  .thumb.selected .check { display: flex; }
+  .thumb .broken {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #666; font-size: 12px;
+  }
+  .footer-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(15,15,15,0.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid #222;
+    padding: 14px 24px;
+    display: flex; gap: 10px; align-items: center; justify-content: center;
+    z-index: 50;
+  }
+  .toast {
+    position: fixed; bottom: 80px; left: 50%;
+    transform: translateX(-50%);
+    background: #222; color: white;
+    padding: 10px 18px; border-radius: 8px;
+    font-size: 13px; opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 100;
+  }
+  .toast.show { opacity: 1; }
+  dialog {
+    background: #1a1a1a; color: #f0f0f0;
+    border: 1px solid #333; border-radius: 12px;
+    padding: 20px; max-width: 600px; width: 90%;
+  }
+  dialog::backdrop { background: rgba(0,0,0,0.7); }
+  dialog textarea {
+    width: 100%; height: 300px;
+    background: #0a0a0a; color: #eee;
+    border: 1px solid #333; border-radius: 6px;
+    padding: 10px; font-family: monospace; font-size: 12px;
+    resize: vertical;
+  }
+  dialog .dialog-actions { margin-top: 12px; display: flex; gap: 8px; justify-content: flex-end; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📸 Photo Picker</h1>
+  <div class="progress"><strong id="doneCount">0</strong> / <span id="totalCount">0</span> places · <strong id="photoCount">0</strong> photos picked</div>
+  <div>
+    <button class="secondary" id="clearBtn">Clear all</button>
+    <button class="primary" id="exportBtn">Export JSON</button>
+  </div>
+</header>
+<main id="main">
+  <div style="color:#888; padding:40px; text-align:center;">Loading photos…</div>
+</main>
+<div class="toast" id="toast"></div>
+<dialog id="exportDialog">
+  <h3 style="margin-bottom:10px;">Your selections</h3>
+  <p style="font-size:13px; color:#888; margin-bottom:10px;">Copy this JSON and paste it back in chat — I'll apply it to <code>index.html</code>.</p>
+  <textarea id="exportText" readonly></textarea>
+  <div class="dialog-actions">
+    <button class="secondary" onclick="document.getElementById('exportDialog').close()">Close</button>
+    <button class="primary" id="copyBtn">Copy to clipboard</button>
+  </div>
+</dialog>
+<script>
+const STORAGE_KEY = 'bkk-photo-picker-v2';
+const OLD_KEY = 'bkk-photo-picker-v1';
+const MAX_PICKS = 3;
+const main = document.getElementById('main');
+const doneCount = document.getElementById('doneCount');
+const totalCount = document.getElementById('totalCount');
+const toast = document.getElementById('toast');
+let photos = {};
+let descriptions = {};
+// selections: { place: [url, url, url] } — up to MAX_PICKS per place
+let selections = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+if (!selections) {
+  // Migrate v1 (single string per place) → v2 (array)
+  const old = JSON.parse(localStorage.getItem(OLD_KEY) || '{}');
+  selections = {};
+  Object.entries(old).forEach(([k, v]) => {
+    if (typeof v === 'string') selections[k] = [v];
+    else if (Array.isArray(v)) selections[k] = v.slice(0, MAX_PICKS);
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(selections));
+}
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1400);
+}
+
+function updateProgress() {
+  const places = Object.keys(photos);
+  const touched = places.filter(p => (selections[p] || []).length > 0).length;
+  const totalPicks = places.reduce((s, p) => s + (selections[p] || []).length, 0);
+  doneCount.textContent = touched;
+  totalCount.textContent = places.length;
+  document.getElementById('photoCount').textContent = totalPicks;
+}
+
+function render() {
+  main.innerHTML = '';
+  Object.entries(photos).forEach(([place, urls]) => {
+    const section = document.createElement('div');
+    section.className = 'place';
+    section.id = 'place-' + place.replace(/\W+/g, '-');
+    const picked = selections[place] || [];
+    const info = descriptions[place] || {};
+    const hoodHtml = info.hood ? '<span class="hood-chip">' + info.hood + '</span>' : '';
+    const descHtml = info.desc ? '<p class="place-desc">' + info.desc + '</p>' : '';
+    const metaHtml = info.meta ? '<p class="place-meta">📍 ' + info.meta + '</p>' : '';
+    const isDone = picked.length === MAX_PICKS;
+    const statusText = picked.length === 0
+      ? urls.length + ' photos — pick up to ' + MAX_PICKS
+      : picked.length + '/' + MAX_PICKS + ' picked' + (isDone ? ' ✓' : '');
+    section.innerHTML =
+      '<div class="place-header">' +
+        '<div class="place-title">' +
+          '<h2>' + place + '</h2>' +
+          hoodHtml +
+        '</div>' +
+        '<div class="status' + (isDone ? ' selected' : picked.length > 0 ? ' partial' : '') + '">' +
+          statusText +
+        '</div>' +
+      '</div>' +
+      descHtml +
+      metaHtml +
+      '<div class="grid"></div>';
+    const grid = section.querySelector('.grid');
+    urls.forEach(url => {
+      const rank = picked.indexOf(url); // -1 if not picked, else 0..MAX_PICKS-1
+      const thumb = document.createElement('div');
+      thumb.className = 'thumb' + (rank >= 0 ? ' selected' : '');
+      thumb.innerHTML =
+        '<img src="' + url + '" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+        '<div class="broken" style="display:none">broken</div>' +
+        '<div class="check">' + (rank >= 0 ? (rank + 1) : '✓') + '</div>';
+      thumb.onclick = () => {
+        const arr = selections[place] || [];
+        const idx = arr.indexOf(url);
+        if (idx >= 0) {
+          // Remove
+          arr.splice(idx, 1);
+          if (arr.length === 0) delete selections[place];
+          else selections[place] = arr;
+        } else {
+          // Add, up to MAX_PICKS
+          if (arr.length >= MAX_PICKS) {
+            showToast('Max ' + MAX_PICKS + ' — unselect one first');
+            return;
+          }
+          selections[place] = [...arr, url];
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(selections));
+        render();
+      };
+      grid.appendChild(thumb);
+    });
+    main.appendChild(section);
+  });
+  updateProgress();
+}
+
+document.getElementById('exportBtn').onclick = () => {
+  document.getElementById('exportText').value = JSON.stringify(selections, null, 2);
+  document.getElementById('exportDialog').showModal();
+};
+document.getElementById('copyBtn').onclick = async () => {
+  await navigator.clipboard.writeText(document.getElementById('exportText').value);
+  showToast('Copied to clipboard');
+};
+document.getElementById('clearBtn').onclick = () => {
+  if (confirm('Clear all selections?')) {
+    selections = {};
+    localStorage.removeItem(STORAGE_KEY);
+    render();
+  }
+};
+
+Promise.all([
+  fetch('data/photos.json').then(r => r.json()),
+  fetch('data/descriptions.json').then(r => r.json()).catch(() => ({}))
+]).then(([photosData, descData]) => {
+  photos = photosData;
+  descriptions = descData;
+  // Prune stale selections (URLs no longer in the current photo set)
+  let pruned = 0;
+  Object.keys(selections).forEach(place => {
+    const validUrls = new Set(photos[place] || []);
+    const keep = (selections[place] || []).filter(u => validUrls.has(u));
+    if (keep.length !== (selections[place] || []).length) pruned += (selections[place] || []).length - keep.length;
+    if (keep.length === 0) delete selections[place];
+    else selections[place] = keep;
+  });
+  if (pruned > 0) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(selections));
+    console.log('Pruned ' + pruned + ' stale selections');
+  }
+  render();
+});
+</script>
+</body>
+</html>
