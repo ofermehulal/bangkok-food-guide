@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bangkok Food Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { display: flex; flex-direction: column; }
+  header {
+    background: linear-gradient(135deg, #d93d1a 0%, #f28c28 100%);
+    color: white;
+    padding: 14px 20px;
+    text-align: center;
+    z-index: 500;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+  header h1 { font-size: 20px; font-weight: 700; }
+  header .subtitle { margin-top: 2px; opacity: 0.9; font-size: 12px; }
+  #map { flex: 1; min-height: 0; }
+  .leaflet-popup-content-wrapper { border-radius: 14px; padding: 0; overflow: hidden; }
+  .leaflet-popup-content { margin: 0; width: 260px !important; }
+  .popup {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .popup .photo {
+    width: 100%;
+    height: 140px;
+    background: #f0f0eb center/cover no-repeat;
+  }
+  .popup .body { padding: 10px 12px 12px; }
+  .popup h3 { font-size: 15px; margin-bottom: 4px; color: #1a1a1a; }
+  .popup .hood {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #fde8d6;
+    color: #b8440e;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .popup .badge-star { background: #ffd95c; color: #6b4a00; margin-left: 4px; }
+  .popup .desc { color: #444; margin-bottom: 8px; font-size: 12px; }
+  .popup .maps-link {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #d93d1a;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #d93d1a;
+    border-radius: 6px;
+  }
+  .popup .maps-link:hover { background: #d93d1a; color: white; }
+  .approx-note {
+    font-size: 10px;
+    color: #c0934a;
+    font-style: italic;
+    margin-top: 4px;
+  }
+  /* Custom colored markers per neighborhood */
+  .food-marker {
+    background: #d93d1a;
+    width: 28px;
+    height: 28px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .food-marker span { transform: rotate(45deg); color: white; font-size: 12px; font-weight: 700; }
+  .food-marker.sukhumvit { background: #e74c3c; }
+  .food-marker.chinatown { background: #c0392b; }
+  .food-marker.phra-nakhon { background: #e67e22; }
+  .food-marker.siam { background: #f39c12; }
+  .food-marker.chula { background: #27ae60; }
+  .food-marker.iconsiam { background: #16a085; }
+  .food-marker.bangrak { background: #2980b9; }
+  .food-marker.airport { background: #8e44ad; }
+  .food-marker.other { background: #7f8c8d; }
+
+  .legend {
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    background: white;
+    padding: 10px 12px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-size: 11px;
+    z-index: 400;
+    max-width: 160px;
+  }
+  .legend h4 { font-size: 11px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; color: #555; }
+  .legend .row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+  .legend .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🍜 Bangkok Food Map</h1>
+  <div class="subtitle">26 spots · tap a pin for details</div>
+</header>
+
+<div id="map"></div>
+
+<div class="legend">
+  <h4>Neighborhood</h4>
+  <div class="row"><span class="dot" style="background:#e74c3c"></span>Sukhumvit</div>
+  <div class="row"><span class="dot" style="background:#c0392b"></span>Chinatown</div>
+  <div class="row"><span class="dot" style="background:#e67e22"></span>Phra Nakhon</div>
+  <div class="row"><span class="dot" style="background:#f39c12"></span>Siam/Pathum Wan</div>
+  <div class="row"><span class="dot" style="background:#27ae60"></span>Chula/Samyan</div>
+  <div class="row"><span class="dot" style="background:#16a085"></span>Khlong San/Icon Siam</div>
+  <div class="row"><span class="dot" style="background:#2980b9"></span>Bang Rak</div>
+  <div class="row"><span class="dot" style="background:#8e44ad"></span>Airport</div>
+  <div class="row"><span class="dot" style="background:#7f8c8d"></span>Other</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const places = [
+  // ===== Sukhumvit =====
+  { name: "Saengchai Phochana", hood: "sukhumvit", lat: 13.726505, lng: 100.5749255, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lERCT1t5tW-IGAN8Oxsf8EofVGe0cGfhb5eLS1q1SdgmbdNrUUtap2nxwMCSeKJh1NjicBba4PLnRF0WQxRK3Kzkk4rtZtEXs2vYQU9TUMXdCUvVqkH5U6F4W79qyFEasWwqe85XlrjGyCc=w800-h600-p", desc: "Live mud crabs, Thai-Chinese seafood. Go-to after a night out.", search: "Saengchai Phochana Bangkok" },
+  { name: "Pier 21 Food Court (Terminal 21)", hood: "sukhumvit", lat: 13.737625, lng: 100.5606201, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lETFG-_KJOQSOXtBAcPjWO-xc3lgpq3uswLzu6922VIy6Dn3KcdW4MT2MxkWeNkv6UxcbbNpz7pnqHVow-C1QJHiIsimPiRGDLMI_Zp6Di5HW_qScl1g3SeXYCxj2-EEGbUX-csgDb8iyAQs=w800-h600-p", desc: "Cheap, well-run Thai food court. Great intro to the classics.", search: "Pier 21 Terminal 21 Bangkok" },
+  { name: "Rung Rueang Pork Noodle", hood: "sukhumvit", lat: 13.7284, lng: 100.5701, approx: true, photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAE7oQhXGwJbYTPdIhLL1aUsrHEzAgSgBy9Td0-H74-1_KkKJduRb7uVFpYGWQvOiPbhK8CBHw_Ib5In-Y_Cieu5Bz_hjTPe13r29tZK5HGHxM8-1VwKFvk0XNrXm2xtKejVcO77FQ=w800-h600-k-no", desc: "Michelin-listed tom yum pork noodle soup. 6+ years in the Guide.", search: "Rung Rueang Pork Noodle Sukhumvit 26" },
+  { name: "Wattana Panich", hood: "sukhumvit", lat: 13.7341825, lng: 100.5876467, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lESbjsSXAs49q2tBdKWMPvOxDemuwuoR5iEmLzyv_GV_JdiXaPv6DH4-31CCLCZpV-eblfFW3l3N4g2XzE5IXVnznIIWMZfZUMqKCYWUmuBkyR_kQPJmM8UKS1Z0Kh-Wlx-QI4R24MRfvdJ=w800-h600-p", desc: "40-year-old simmered Chinese-style beef noodle broth. Iconic.", search: "Wattana Panich Beef Noodle Bangkok" },
+  { name: "Phed Mark", hood: "sukhumvit", lat: 13.7202176, lng: 100.5838945, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQ8nOnXYRQHlBUa4h-n5C_CPN-53YwyRkdUNKeLilboNmav4zbqb-peg1QxS_xoh7I_NKRb5c5l24kuGWRHQuICJd8hEdDnHZ1YGfQYt09YFWFBd0VDdLwM7pzouoS6HnqvInoGy4HHPvTF=w800-h600-p", desc: "Mark Wiens' restaurant. VERY spicy pad krapao.", search: "Phed Mark Bangkok" },
+  { name: "Baan E-sarn Muangyos", hood: "sukhumvit", lat: 13.7367949, lng: 100.5668343, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQnI5ABfPXfVYTcqT1C5o5LmoEf7uD0huznOSrMVpe1yi_z2fBD3L7jYd82XK8teit_pyTAo_NphmV-7UDvAcdZ7r3e_4ini8pbL5N6XkgGZbVzlNvUxgMeBMtp0urTeIJb0aBPBD6m8qE=w800-h600-p", desc: "Isan pub atmosphere — food + beers.", search: "Baan E-sarn Muangyos Bangkok" },
+  { name: "Little Bee Thai Crispy Crepe", hood: "sukhumvit", lat: 13.7318718, lng: 100.5698082, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEReurRXhv00MhjrNBP3aE56fKTGzkpu50J9N3ES8oVFMEcSej36mYfQUVNcGTWUufygsfmFsZDcaXPTog-tbuJPAZ9aQ0K4gIt7c_ErbD8noq8JJRabH-T99R_UVjRB5-6HfhT_0uA13mvc=w800-h600-p", desc: "Michelin Bib crispy crepes (khanom buang). Est. 1984.", search: "Little Bee Thai Crispy Crepe EmQuartier" },
+
+  // ===== Chinatown =====
+  { name: "Ann Guay Tiew Kua Gai", hood: "chinatown", lat: 13.7467096, lng: 100.5111996, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lES8Zo9APKJls_GJNyhV0CyCQmHB3mJS15ds_yNql14OAegREwJIk10sHH8aL5s2dgylvxWyVdfrTFZVgmQQ6zu-LxzPWglAhfzWNDjAtdSnfCyPU9fhjCOvfb7i4WBRS-HpzyMHtmPmxwoH=w800-h600-p", desc: "Fried rice noodles with chicken and egg. Michelin 5 yrs.", search: "Ann Guay Tiew Kua Gai Chinatown" },
+  { name: "Nai Ek Roll Noodle", hood: "chinatown", lat: 13.7401053, lng: 100.5099369, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQYN7LEVXnAWl4B-m-63B4TxOG9FmHwjJp3VaLYoWhGGKOJ0sBvGO0JoBdWQjTNVBG_Y0o9JR-CaOCxpPEK74pAayGyj26VVCgpOQa5vhi8eC06_gLHJ5R6wUlr8T_CA5-wrk0w=w800-h600-p", desc: "Clear pork noodle soup with crispy pork belly. Michelin 5 yrs.", search: "Nai Ek Roll Noodle Yaowarat" },
+  { name: "Kuay Jab Mr Joe", hood: "chinatown", lat: 13.7091825, lng: 100.5141618, photo: "https://lh3.googleusercontent.com/geougc/AF1QipMviLZ5gXEN68dqVG7wstD_DnpL1lA4zQdwXhjc=h800-no", desc: "Peppery rolled rice-noodle soup with crispy pork belly.", search: "Kuay Jab Mr Joe Bangkok" },
+
+  // ===== Phra Nakhon =====
+  { name: "Kor Panich (K. Panich)", hood: "phra-nakhon", lat: 13.7520958, lng: 100.4983613, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQk1swHbckePpQrrdfKgl7UcyobfhWC8hf1oLTF5GYQN1KVuF5s3nmlP0GcnJzL9iThhDD8egiBspkZJ07u-s2qBrRHfneBb17z5DxZbr_TjzjjUnLy8zHk7wD78jG7mzUIzomS4GQmNnYs=w800-h600-p", desc: "Legendary mango sticky rice. 7 yrs in Michelin Guide.", search: "Kor Panich Mango Sticky Rice" },
+  { name: "Thipsamai Pad Thai", hood: "phra-nakhon", lat: 13.7527976, lng: 100.504823, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQouqIDRj8Q6EWXeecMVLWcePhHGcCXVfs4RVtBPmG1rv90dVe3U2Bk-PCZ_PEE0QsYAV-YCaLcr16Ve4KUb5CdFp2GJWyYwAF5rZsBCdxGENoy0a_moUwejmCr446FD39YXEGe_bOA8t-X=w800-h600-p", desc: "Thailand's most famous pad thai. Prawn-oil secret weapon.", search: "Thipsamai Pad Thai Bangkok" },
+  { name: "Original Pad Kra Pao 1993", hood: "phra-nakhon", lat: 13.7228226, lng: 100.4955715, photo: "https://lh3.googleusercontent.com/geougc/AF1QipPIpqzEO-HAcfLBeiKsav2_y45YDf-umJ8TaB9F=h800-no", desc: "Pad krapao the traditional way. Very cheap.", search: "Original Pad Kra Pao 1993" },
+
+  // ===== Siam / Pathum Wan =====
+  { name: "Shu Daxia Hot Pot", hood: "siam", lat: 13.7454547, lng: 100.5300979, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lESFcP2QCb_lIyynUnVlqrRmoPzG1BQitoTGuCtod6apOmy2jtyf4-sGrGmxk650iSMamOs7SBg5NMNlSPNbG4Ejut2HTaGQiUTANXe4IKbFEIEv6bOeUTPKE1cZc8JwwUyZgrnDxESCCZQd=w800-h600-p", desc: "Chinese-style hot pot at MBK. Good for groups.", search: "Shu Daxia Hot Pot MBK" },
+  { name: "Kam's Roast", hood: "siam", lat: 13.7466, lng: 100.5397, approx: true, photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEMuYO28zGmWF6ExWZKHohb0kH8xQHNfqa7msduxTOaJ833e8KICaWkpKHqgBqNv_2m_6iO8bakHFQeNqUt7W7Xpl1S5L2CWcl54j520GXLZi6uZlKBzHl5M8TB_72cr4c_CQbxkQ=w800-h600-k-no", desc: "1 Michelin Star for 11 years. HK-style roast duck.", search: "Kams Roast Central World Bangkok", star: true },
+
+  // ===== Chula / Samyan =====
+  { name: "Jeh O Chula", hood: "chula", lat: 13.7424996, lng: 100.5225179, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lESZiP6InwdvSnzDTb2GKZmMutFdLK8EAmemsaSJ50oi49Q7IlTfRB3z4fhb-jbBl1ihuAqtnv7v5Pr1cqC7ywKLQgZ9kB9oSXJxukPPrRSxZQ2Z5WswM3F2PXTj2zv6UvQWIaAhkrWJMowm=w800-h600-p", desc: "Legendary late-night Mama tom yum noodles. Expect a queue.", search: "Jeh O Chula" },
+  { name: "Jae Wan", hood: "chula", lat: 13.7396492, lng: 100.5222225, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lETbPksR1lbSQmUzN2n99iof5C9xX2mZpb2DejBjIL1xN0J9vwucgC9aes2xWIkgwNbqvnTMzmxb9CIAjQ_BkBk9VOWQhHmgRuyAePkbg87FMTABALGGiIcBs9XuCTAStRxFmLcwlBj-3qxy=w800-h600-p", desc: "Local Thai comfort food. Neighborhood favorite.", search: "Jae Wan Bangkok" },
+
+  // ===== Khlong San / Icon Siam =====
+  { name: "Sook Siam Market", hood: "iconsiam", lat: 13.7264086, lng: 100.5095682, photo: "https://lh3.googleusercontent.com/geougc/AF1QipPFUibl1qjDqB89_pEMhMNt1zeYTyjlhqH_0G9i=h800-no", desc: "Giant river prawns and regional Thai food stalls.", search: "Sook Siam Icon Siam" },
+
+  // ===== Bang Rak =====
+  { name: "Somboon Seafood", hood: "bangrak", lat: 13.7282415, lng: 100.5266321, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lER0rHYkn4GyBY-1PtbKeKq-kAzWPN3CcAozIqBgOPKP55uLwsxVlyOYBRNUkVG8lWU-lSGc839FhIzuX9SudrLBmVtu9_FD8-CC0wB2ANQXWU0Hk7rqIc1Y6styK-kuJKmA-W_7cLsjspk=w800-h600-p", desc: "Famous curry crab (pu phad pong karee). Surawong branch.", search: "Somboon Seafood Surawong" },
+  { name: "Heng Chun Seng", hood: "bangrak", lat: 13.7197, lng: 100.5217, approx: true, photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFMrhMwMnUAAD341qbhc8Jkb8zWuP4SMVIxFx5Dwoq8Uf6eVQc4zj2QXaI3OZivRzI4z8HONpjptNMM36XVlpGba_L9tuvoULCbKS11jojJt2eAB-iTxJPwcpRr5hFg7QPtDKo9=w800-h600-k-no", desc: "Best beef soup in Bangkok. Try the hot pot + mixed-meat plate.", search: "Heng Chun Seng beef soup Bangkok" },
+
+  // ===== Airport =====
+  { name: "Ginger Farm Kitchen", hood: "airport", lat: 13.6929022, lng: 100.7500233, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQ5OOvYzLl8FDJt7sV8cEgmWwQJuB-0GCUZjB7WPfcP5lP8LtKYyv19i0kt8MCzKslTQMB2AQOm_4WMK0PFt_fCzDjXuynLVMU3c8tSUJwe-_XC_ltlltpsRs5RFIBvInhEKKawY4wUxF-Y=w800-h600-p", desc: "Farm-to-city Thai, no MSG. Michelin Bib. At Suvarnabhumi.", search: "Ginger Farm Kitchen Suvarnabhumi" },
+
+  // ===== Other =====
+  { name: "Hia Big 5 Pots", hood: "other", lat: 13.7209455, lng: 100.5959487, photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lERzJAHgrkA7Ty1ZXqEGy0suYJ3TsOjwzaOKaUBLIQW-mt94DFlS6JOVmIj51Emu57MZH1AcLIfjTFGpzWK85uIzpfQcKG0B5T58C-z_491SYL_jVv2zlyIRJAOvGJ86iH7znGxZ=w800-h600-p", desc: "Pork wontons — local favorite.", search: "Hia Big 5 Pots Bangkok" },
+  { name: "Kin Kin Seafood", hood: "other", lat: 13.7335, lng: 100.5557, approx: true, photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAF3OuBnIWYbjx-aHskCdH55oX_6BY1j99RFAWx9RcqQj6lf5lJ0XwQ5gpl5mfNBJaGt-1bWSD8e1PSY8clwexRBHdRwmb2vFhTdCG3oEY7K979qT6n2JGS36dwQgtqcPwK094VkOZWqDFM=w800-h600-k-no", desc: "Mama Tom Yum with raw yolks + crab fried rice. Pricey but 10/10.", search: "Kin Kin Seafood Bangkok" },
+  { name: "Good Taste Street Food", hood: "other", lat: 13.7361, lng: 100.5520, approx: true, photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGPjltwQ7Jl43pD8xeqoN0Q3IvuT8oyNk0IkWNwE516klYBTx-D9JxeRmUFqYXLBvfGLMr_Xie18R_4yHwCZBNKPjs-ZXxvpZS7aHK8z_JSicjGz8rmOLeTwh-avACCSbWjb20=w800-h600-k-no", desc: "Thai classics — pad krapao, grilled pork, stir-fries.", search: "Good Taste Street Food Bangkok" },
+  { name: "Lay Lao", hood: "other", lat: 13.7804, lng: 100.5442, approx: true, photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGd3rX5CE1i7D8T8jY2KsmaVSEoMuzSVLvdV3pvAebq8FK5dc4RBssH6xhP8re4zmL1LNCCEHqa9yGh4oaEL6YPmJyEzmTN3jTsz1AJEJNzAndQrezbEeecVNwvMIxDeoDTnJ_A8Q=w800-h600-k-no", desc: "Comforting Hua Hin–style Thai. Michelin Bib 2018–2025.", search: "Lay Lao Bangkok" },
+  { name: "Uncle Liu", hood: "other", lat: 13.7272, lng: 100.5682, approx: true, photo: null, desc: "Thai-Chinese fusion, very local hidden gem. (Photo unavailable on Maps.)", search: "Uncle Liu Bangkok Thai Chinese" }
+];
+
+const hoodNames = {
+  sukhumvit: "Sukhumvit",
+  chinatown: "Chinatown",
+  "phra-nakhon": "Phra Nakhon",
+  siam: "Siam / Pathum Wan",
+  chula: "Chula / Samyan",
+  iconsiam: "Khlong San / Icon Siam",
+  bangrak: "Bang Rak",
+  airport: "Airport",
+  other: "Other"
+};
+
+function mapsUrl(q) {
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+}
+
+function popupHtml(p) {
+  const photoHtml = p.photo ? `<div class="photo" style="background-image:url('${p.photo}')"></div>` : '';
+  const starHtml = p.star ? '<span class="hood badge-star">★ Michelin Star</span>' : '';
+  const approxHtml = p.approx ? '<div class="approx-note">📍 Approximate location — tap link to confirm</div>' : '';
+  return `
+    <div class="popup">
+      ${photoHtml}
+      <div class="body">
+        <h3>${p.name}</h3>
+        <span class="hood">${hoodNames[p.hood]}</span>${starHtml}
+        <div class="desc">${p.desc}</div>
+        ${approxHtml}
+        <a class="maps-link" href="${mapsUrl(p.search)}" target="_blank" rel="noopener">Open in Google Maps →</a>
+      </div>
+    </div>
+  `;
+}
+
+// Initialize map centered on central Bangkok
+const map = L.map('map').setView([13.7400, 100.5350], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+const markers = [];
+places.forEach(p => {
+  const icon = L.divIcon({
+    className: '',
+    html: `<div class="food-marker ${p.hood}"><span>${p.name[0]}</span></div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 28],
+    popupAnchor: [0, -28]
+  });
+  const marker = L.marker([p.lat, p.lng], { icon }).addTo(map);
+  marker.bindPopup(popupHtml(p), { maxWidth: 280, minWidth: 260 });
+  markers.push(marker);
+});
+
+// Fit bounds to all markers (but exclude the airport which is far away)
+const centralMarkers = markers.filter((_, i) => places[i].hood !== 'airport');
+const group = L.featureGroup(centralMarkers);
+map.fitBounds(group.getBounds().pad(0.1));
+</script>
+
+</body>
+</html>
