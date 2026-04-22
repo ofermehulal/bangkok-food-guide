@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bangkok Food Guide — Design B (Editorial)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,800;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #f7f3ed;
+    color: #1c1a17;
+    line-height: 1.55;
+    padding-bottom: 80px;
+  }
+  .masthead {
+    padding: 56px 24px 40px;
+    text-align: center;
+    border-bottom: 1px solid #dfd6c7;
+  }
+  .masthead .kicker {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: #a8341c; font-weight: 700; margin-bottom: 12px;
+  }
+  .masthead h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 56px; font-weight: 800;
+    letter-spacing: -2px; line-height: 1;
+  }
+  .masthead h1 em { font-style: italic; font-weight: 400; color: #a8341c; }
+  .masthead .dek {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 18px; color: #5a544a;
+    margin-top: 18px; max-width: 480px; margin-left: auto; margin-right: auto;
+  }
+  .masthead .meta {
+    margin-top: 24px; font-size: 12px; color: #8a8070;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .map-btn {
+    display: inline-block; margin-top: 20px;
+    padding: 10px 22px;
+    border: 1.5px solid #1c1a17;
+    color: #1c1a17; text-decoration: none;
+    font-size: 13px; font-weight: 600;
+    border-radius: 2px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    transition: all 0.15s;
+  }
+  .map-btn:hover { background: #1c1a17; color: #f7f3ed; }
+  main { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+  .chapter { margin-top: 64px; }
+  .chapter-header {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #1c1a17;
+  }
+  .chapter-header h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 32px; font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .chapter-header .count {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: #8a8070; font-weight: 600;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 40px 28px;
+  }
+  .hero-card { grid-column: 1 / -1; }
+  article.card {
+    display: flex; flex-direction: column;
+  }
+  article.card .img-wrap {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: #ebe3d2;
+    margin-bottom: 16px;
+  }
+  article.hero-card .img-wrap {
+    aspect-ratio: 16/7;
+    margin-bottom: 20px;
+  }
+  article.card img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.4s;
+  }
+  article.card:hover img { transform: scale(1.03); }
+  article.card .no-photo {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 72px; color: #c7bca8;
+  }
+  article.card h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+  }
+  article.hero-card h3 { font-size: 36px; }
+  article.card .badges { color: #a8341c; font-size: 16px; margin-left: 4px; }
+  article.card p.desc {
+    font-size: 15px; color: #3a3530;
+    margin-bottom: 12px;
+  }
+  article.card .meta {
+    font-size: 12px; color: #8a8070;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    padding-top: 10px; border-top: 1px solid #dfd6c7;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  article.card .meta a {
+    color: #a8341c; text-decoration: none; font-weight: 600;
+  }
+  article.card .meta a:hover { text-decoration: underline; }
+  .filter-bar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(247,243,237,0.95);
+    backdrop-filter: blur(8px);
+    padding: 14px 24px;
+    border-bottom: 1px solid #dfd6c7;
+    display: flex; gap: 8px; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .chip {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border: 1px solid #c7bca8;
+    background: transparent;
+    color: #5a544a;
+    border-radius: 2px;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    cursor: pointer; white-space: nowrap;
+  }
+  .chip.active { background: #1c1a17; color: #f7f3ed; border-color: #1c1a17; }
+  @media (max-width: 600px) {
+    .masthead h1 { font-size: 40px; }
+    article.hero-card h3 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="kicker">A Personal Guide · Vol. 1</div>
+  <h1>Bangkok, <em>eaten</em>.</h1>
+  <p class="dek">Twenty-six spots, pulled from a year of Instagram saves and vetted by friends who live there. No rankings — just plans.</p>
+  <div class="meta">Updated April 2026 · 26 entries</div>
+  <a class="map-btn" href="map.html">View on map →</a>
+</header>
+<div class="filter-bar" id="filters"></div>
+<main id="main"></main>
+<script>
+const places = [
+  // ===== Sukhumvit =====
+  {
+    name: "Saengchai Phochana",
+    hood: "Sukhumvit",
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lERCT1t5tW-IGAN8Oxsf8EofVGe0cGfhb5eLS1q1SdgmbdNrUUtap2nxwMCSeKJh1NjicBba4PLnRF0WQxRK3Kzkk4rtZtEXs2vYQU9TUMXdCUvVqkH5U6F4W79qyFEasWwqe85XlrjGyCc=w800-h600-p",
+    desc: "Live mud crabs and Thai-Chinese seafood. Classic go-to after a night out.",
+    meta: "762/5-7 Sukhumvit Rd, Khlong Tan, Khlong Toei 10110",
+    search: "Saengchai Phochana Bangkok"
+  },
+  {
+    name: "Pier 21 Food Court (Terminal 21)",
+    hood: "Sukhumvit",
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lETFG-_KJOQSOXtBAcPjWO-xc3lgpq3uswLzu6922VIy6Dn3KcdW4MT2MxkWeNkv6UxcbbNpz7pnqHVow-C1QJHiIsimPiRGDLMI_Zp6Di5HW_qScl1g3SeXYCxj2-EEGbUX-csgDb8iyAQs=w800-h600-p",
+    desc: "Cheap, well-run Thai food court. Great intro to the classics — pad krapao, green curry, stir-fries.",
+    meta: "Level 5, Terminal 21, 88 Sukhumvit Rd, Khlong Toei Nuea, Watthana 10110",
+    search: "Pier 21 Terminal 21 Bangkok"
+  },
+  {
+    name: "Rung Rueang Pork Noodle",
+    hood: "Sukhumvit",
+    badges: ["michelin"],
+    photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAE7oQhXGwJbYTPdIhLL1aUsrHEzAgSgBy9Td0-H74-1_KkKJduRb7uVFpYGWQvOiPbhK8CBHw_Ib5In-Y_Cieu5Bz_hjTPe13r29tZK5HGHxM8-1VwKFvk0XNrXm2xtKejVcO77FQ=w800-h600-k-no",
+    desc: "Michelin-listed tom yum pork noodle soup (70฿). 6+ years in the Guide.",
+    meta: "Sukhumvit Soi 26",
+    search: "Rung Rueang Pork Noodle Sukhumvit 26"
+  },
+  {
+    name: "Wattana Panich",
+    hood: "Sukhumvit",
+    badges: ["michelin"],
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lESbjsSXAs49q2tBdKWMPvOxDemuwuoR5iEmLzyv_GV_JdiXaPv6DH4-31CCLCZpV-eblfFW3l3N4g2XzE5IXVnznIIWMZfZUMqKCYWUmuBkyR_kQPJmM8UKS1Z0Kh-Wlx-QI4R24MRfvdJ=w800-h600-p",
+    desc: "40-year-old simmered Chinese-style beef noodle broth (100฿). One of Bangkok's most iconic bowls.",
+    meta: "336–338 Ekkamai Rd (Sukhumvit 63), Watthana 10110",
+    search: "Wattana Panich Beef Noodle Bangkok"
+  },
+  {
+    name: "Phed Mark",
+    hood: "Sukhumvit",
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQ8nOnXYRQHlBUa4h-n5C_CPN-53YwyRkdUNKeLilboNmav4zbqb-peg1QxS_xoh7I_NKRb5c5l24kuGWRHQuICJd8hEdDnHZ1YGfQYt09YFWFBd0VDdLwM7pzouoS6HnqvInoGy4HHPvTF=w800-h600-p",
+    desc: "Mark Wiens' restaurant — VERY spicy pad krapao. For chili lovers.",
+    meta: "Ekkamai area",
+    search: "Phed Mark Bangkok"
+  },
+  {
+    name: "Baan E-sarn Muangyos",
+    hood: "Sukhumvit",
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQnI5ABfPXfVYTcqT1C5o5LmoEf7uD0huznOSrMVpe1yi_z2fBD3L7jYd82XK8teit_pyTAo_NphmV-7UDvAcdZ7r3e_4ini8pbL5N6XkgGZbVzlNvUxgMeBMtp0urTeIJb0aBPBD6m8qE=w800-h600-p",
+    desc: "Isan-style cooking in a pub atmosphere — food + beers. Don't overdo it on the salad for dinner.",
+    meta: "Sukhumvit area",
+    search: "Baan E-sarn Muangyos Bangkok"
+  },
+  {
+    name: "Little Bee Thai Crispy Crepe",
+    hood: "Sukhumvit",
+    badges: ["michelin"],
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEReurRXhv00MhjrNBP3aE56fKTGzkpu50J9N3ES8oVFMEcSej36mYfQUVNcGTWUufygsfmFsZDcaXPTog-tbuJPAZ9aQ0K4gIt7c_ErbD8noq8JJRabH-T99R_UVjRB5-6HfhT_0uA13mvc=w800-h600-p",
+    desc: "Made-to-order Thai crispy crepes (khanom buang). Michelin Bib 2021–2024. Try the Sweet Golden Egg Yolk Threads. Est. 1984.",
+    meta: "EmQuartier / Phrom Phong",
+    search: "Little Bee Thai Crispy Crepe EmQuartier"
+  },
+
+  // ===== Chinatown (Yaowarat) =====
+  {
+    name: "Ann Guay Tiew Kua Gai",
+    hood: "Chinatown",
+    badges: ["michelin"],
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lES8Zo9APKJls_GJNyhV0CyCQmHB3mJS15ds_yNql14OAegREwJIk10sHH8aL5s2dgylvxWyVdfrTFZVgmQQ6zu-LxzPWglAhfzWNDjAtdSnfCyPU9fhjCOvfb7i4WBRS-HpzyMHtmPmxwoH=w800-h600-p",
+    desc: "Fried rice noodles with chicken and egg (60฿). 5 years in the Michelin Guide.",
+    meta: "Chinatown (Yaowarat)",
+    search: "Ann Guay Tiew Kua Gai Chinatown Bangkok"
+  },
+  {
+    name: "Nai Ek Roll Noodle",
+    hood: "Chinatown",
+    badges: ["michelin"],
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQYN7LEVXnAWl4B-m-63B4TxOG9FmHwjJp3VaLYoWhGGKOJ0sBvGO0JoBdWQjTNVBG_Y0o9JR-CaOCxpPEK74pAayGyj26VVCgpOQa5vhi8eC06_gLHJ5R6wUlr8T_CA5-wrk0w=w800-h600-p",
+    desc: "Clear Chinese-style pork noodle soup with crispy pork belly (100฿). 5 years in the Michelin Guide.",
+    meta: "Chinatown (Yaowarat)",
+    search: "Nai Ek Roll Noodle Yaowarat"
+  },
+  {
+    name: "Kuay Jab Mr Joe",
+    hood: "Chinatown",
+    photo: "https://lh3.googleusercontent.com/geougc/AF1QipMviLZ5gXEN68dqVG7wstD_DnpL1lA4zQdwXhjc=h800-no",
+    desc: "Peppery rolled rice-noodle soup with crispy pork belly.",
+    meta: "Chinatown (Yaowarat)",
+    search: "Kuay Jab Mr Joe Bangkok"
+  },
+
+  // ===== Phra Nakhon (Old City) =====
+  {
+    name: "Kor Panich (K. Panich)",
+    hood: "Phra Nakhon",
+    badges: ["michelin"],
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQk1swHbckePpQrrdfKgl7UcyobfhWC8hf1oLTF5GYQN1KVuF5s3nmlP0GcnJzL9iThhDD8egiBspkZJ07u-s2qBrRHfneBb17z5DxZbr_TjzjjUnLy8zHk7wD78jG7mzUIzomS4GQmNnYs=w800-h600-p",
+    desc: "Legendary mango sticky rice — 130฿. 7 years in the Michelin Guide. Pair with a temple visit.",
+    meta: "Phra Nakhon (near the temples)",
+    search: "Kor Panich Mango Sticky Rice Bangkok"
+  },
+  {
+    name: "Thipsamai Pad Thai",
+    hood: "Phra Nakhon",
+    badges: ["michelin"],
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQouqIDRj8Q6EWXeecMVLWcePhHGcCXVfs4RVtBPmG1rv90dVe3U2Bk-PCZ_PEE0QsYAV-YCaLcr16Ve4KUb5CdFp2GJWyYwAF5rZsBCdxGENoy0a_moUwejmCr446FD39YXEGe_bOA8t-X=w800-h600-p",
+    desc: "The most famous pad thai in Thailand — secret weapon is prawn oil. Try the Pad Thai Song-Kreung (ultimate version).",
+    meta: "313–315 Maha Chai Rd, Samran Rat, Phra Nakhon 10200",
+    search: "Thipsamai Pad Thai Bangkok"
+  },
+  {
+    name: "Original Pad Kra Pao 1993",
+    hood: "Phra Nakhon",
+    photo: "https://lh3.googleusercontent.com/geougc/AF1QipPIpqzEO-HAcfLBeiKsav2_y45YDf-umJ8TaB9F=h800-no",
+    desc: "Pad krapao done the traditional way. Very affordable (~8–20 ILS/dish).",
+    meta: "Phra Nakhon area",
+    search: "Original Pad Kra Pao 1993 Bangkok"
+  },
+
+  // ===== Siam / Pathum Wan =====
+  {
+    name: "Shu Daxia Hot Pot",
+    hood: "Siam / Pathum Wan",
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lESFcP2QCb_lIyynUnVlqrRmoPzG1BQitoTGuCtod6apOmy2jtyf4-sGrGmxk650iSMamOs7SBg5NMNlSPNbG4Ejut2HTaGQiUTANXe4IKbFEIEv6bOeUTPKE1cZc8JwwUyZgrnDxESCCZQd=w800-h600-p",
+    desc: "Chinese-style hot pot with marbled beef rolls. Good group dinner.",
+    meta: "Floor 6, MBK Center, 444 Phaya Thai Rd, Pathum Wan 10330",
+    search: "Shu Daxia Hot Pot MBK"
+  },
+  {
+    name: "Kam's Roast",
+    hood: "Siam / Pathum Wan",
+    badges: ["star"],
+    photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEMuYO28zGmWF6ExWZKHohb0kH8xQHNfqa7msduxTOaJ833e8KICaWkpKHqgBqNv_2m_6iO8bakHFQeNqUt7W7Xpl1S5L2CWcl54j520GXLZi6uZlKBzHl5M8TB_72cr4c_CQbxkQ=w800-h600-k-no",
+    desc: "1 Michelin Star for 11 years. Hong Kong–style roast duck (350฿ / quarter).",
+    meta: "Central World, Siam",
+    search: "Kams Roast Central World Bangkok"
+  },
+
+  // ===== Chula / Samyan =====
+  {
+    name: "Jeh O Chula",
+    hood: "Chula / Samyan",
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lESZiP6InwdvSnzDTb2GKZmMutFdLK8EAmemsaSJ50oi49Q7IlTfRB3z4fhb-jbBl1ihuAqtnv7v5Pr1cqC7ywKLQgZ9kB9oSXJxukPPrRSxZQ2Z5WswM3F2PXTj2zv6UvQWIaAhkrWJMowm=w800-h600-p",
+    desc: "Legendary late-night Mama tom yum noodles. Expect a queue — arrive early.",
+    meta: "Chula / Samyan area",
+    search: "Jeh O Chula Bangkok"
+  },
+  {
+    name: "Jae Wan",
+    hood: "Chula / Samyan",
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lETbPksR1lbSQmUzN2n99iof5C9xX2mZpb2DejBjIL1xN0J9vwucgC9aes2xWIkgwNbqvnTMzmxb9CIAjQ_BkBk9VOWQhHmgRuyAePkbg87FMTABALGGiIcBs9XuCTAStRxFmLcwlBj-3qxy=w800-h600-p",
+    desc: "Local Thai comfort food — a neighborhood favorite.",
+    meta: "Chula / Samyan area",
+    search: "Jae Wan Bangkok"
+  },
+
+  // ===== Khlong San / Icon Siam =====
+  {
+    name: "Sook Siam Market",
+    hood: "Khlong San / Icon Siam",
+    photo: "https://lh3.googleusercontent.com/geougc/AF1QipPFUibl1qjDqB89_pEMhMNt1zeYTyjlhqH_0G9i=h800-no",
+    desc: "Giant river prawns and regional Thai food stalls under one roof. A must for market lovers.",
+    meta: "Icon Siam, Charoen Nakhon",
+    search: "Sook Siam Icon Siam"
+  },
+
+  // ===== Bang Rak =====
+  {
+    name: "Somboon Seafood",
+    hood: "Bang Rak",
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lER0rHYkn4GyBY-1PtbKeKq-kAzWPN3CcAozIqBgOPKP55uLwsxVlyOYBRNUkVG8lWU-lSGc839FhIzuX9SudrLBmVtu9_FD8-CC0wB2ANQXWU0Hk7rqIc1Y6styK-kuJKmA-W_7cLsjspk=w800-h600-p",
+    desc: "Bangkok's most famous curry crab (pu phad pong karee). Tourist-heavy but the crab is legit.",
+    meta: "Surawong (also Chong Nonsi, Siam, CentralWorld)",
+    search: "Somboon Seafood Surawong"
+  },
+  {
+    name: "Heng Chun Seng",
+    hood: "Bang Rak",
+    photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFMrhMwMnUAAD341qbhc8Jkb8zWuP4SMVIxFx5Dwoq8Uf6eVQc4zj2QXaI3OZivRzI4z8HONpjptNMM36XVlpGba_L9tuvoULCbKS11jojJt2eAB-iTxJPwcpRr5hFg7QPtDKo9=w800-h600-k-no",
+    desc: "Best beef soup in Bangkok. Order the hot pot soup with the mixed-meat plate.",
+    meta: "Bang Rak area",
+    search: "Heng Chun Seng beef soup Bangkok"
+  },
+
+  // ===== Airport =====
+  {
+    name: "Ginger Farm Kitchen",
+    hood: "Airport (BKK)",
+    badges: ["michelin"],
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lEQ5OOvYzLl8FDJt7sV8cEgmWwQJuB-0GCUZjB7WPfcP5lP8LtKYyv19i0kt8MCzKslTQMB2AQOm_4WMK0PFt_fCzDjXuynLVMU3c8tSUJwe-_XC_ltlltpsRs5RFIBvInhEKKawY4wUxF-Y=w800-h600-p",
+    desc: "Farm-to-city Thai, zero MSG. Michelin Bib Gourmand 2020–2023. Convenient stop on arrival or departure.",
+    meta: "Suvarnabhumi Airport (original in Chiang Mai)",
+    search: "Ginger Farm Kitchen Suvarnabhumi"
+  },
+
+  // ===== Other / Area varies =====
+  {
+    name: "Kin Kin Seafood",
+    hood: "Other",
+    photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAF3OuBnIWYbjx-aHskCdH55oX_6BY1j99RFAWx9RcqQj6lf5lJ0XwQ5gpl5mfNBJaGt-1bWSD8e1PSY8clwexRBHdRwmb2vFhTdCG3oEY7K979qT6n2JGS36dwQgtqcPwK094VkOZWqDFM=w800-h600-k-no",
+    desc: "Mama Tom Yum noodles with raw egg yolks and crab fried rice. Pricey for Bangkok but quality is 10/10.",
+    meta: "Bangkok (central)",
+    search: "Kin Kin Seafood Bangkok"
+  },
+  {
+    name: "Uncle Liu",
+    hood: "Other",
+    photo: null,
+    desc: "Thai-Chinese fusion — stir-fries, fried rice with egg. Very local, hidden gem.",
+    meta: "Bangkok",
+    search: "Uncle Liu restaurant Bangkok"
+  },
+  {
+    name: "Hia Big 5 Pots",
+    hood: "Other",
+    photo: "https://lh3.googleusercontent.com/geougc-cs/AMG9lERzJAHgrkA7Ty1ZXqEGy0suYJ3TsOjwzaOKaUBLIQW-mt94DFlS6JOVmIj51Emu57MZH1AcLIfjTFGpzWK85uIzpfQcKG0B5T58C-z_491SYL_jVv2zlyIRJAOvGJ86iH7znGxZ=w800-h600-p",
+    desc: "Pork wontons — a local favorite.",
+    meta: "Bangkok",
+    search: "Hia Big 5 Pots Bangkok"
+  },
+  {
+    name: "Good Taste Street Food",
+    hood: "Other",
+    photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGPjltwQ7Jl43pD8xeqoN0Q3IvuT8oyNk0IkWNwE516klYBTx-D9JxeRmUFqYXLBvfGLMr_Xie18R_4yHwCZBNKPjs-ZXxvpZS7aHK8z_JSicjGz8rmOLeTwh-avACCSbWjb20=w800-h600-k-no",
+    desc: "Thai classics — pad krapao, grilled pork, stir-fried morning glory. Solid repeat-visit spot.",
+    meta: "Bangkok",
+    search: "Good Taste Street Food Bangkok"
+  },
+  {
+    name: "Lay Lao",
+    hood: "Other",
+    badges: ["michelin"],
+    photo: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGd3rX5CE1i7D8T8jY2KsmaVSEoMuzSVLvdV3pvAebq8FK5dc4RBssH6xhP8re4zmL1LNCCEHqa9yGh4oaEL6YPmJyEzmTN3jTsz1AJEJNzAndQrezbEeecVNwvMIxDeoDTnJ_A8Q=w800-h600-k-no",
+    desc: "Comforting Hua Hin–style Thai. Michelin Bib Gourmand 2018–2025. Try the Deep Fried Sun Dried Pork Belly (185฿) and the whole young coconut.",
+    meta: "Bangkok",
+    search: "Lay Lao Bangkok"
+  }
+];
+
+const hoodOrder = [
+  "Sukhumvit",
+  "Chinatown",
+  "Phra Nakhon",
+  "Siam / Pathum Wan",
+  "Chula / Samyan",
+  "Khlong San / Icon Siam",
+  "Bang Rak",
+  "Airport (BKK)",
+  "Other"
+];
+const hoodOrder = ["Sukhumvit","Chinatown","Phra Nakhon","Siam / Pathum Wan","Chula / Samyan","Khlong San / Icon Siam","Bang Rak","Airport (BKK)","Other"];
+const main = document.getElementById('main');
+const filters = document.getElementById('filters');
+let active = 'All';
+function badge(b) { return b === 'michelin' ? '●' : b === 'star' ? '★' : ''; }
+function render() {
+  main.innerHTML = '';
+  const list = active === 'All' ? places : places.filter(p => p.hood === active);
+  const order = active === 'All' ? hoodOrder : [active];
+  order.forEach(h => {
+    const items = list.filter(p => p.hood === h);
+    if (!items.length) return;
+    const chapter = document.createElement('section');
+    chapter.className = 'chapter';
+    chapter.innerHTML = '<div class="chapter-header"><h2>' + h + '</h2><div class="count">' + items.length + ' ' + (items.length === 1 ? 'spot' : 'spots') + '</div></div><div class="grid"></div>';
+    const grid = chapter.querySelector('.grid');
+    items.forEach((p, i) => {
+      const isHero = i === 0 && items.length > 1 && active === 'All';
+      const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.search);
+      const img = p.photo
+        ? '<img src="' + p.photo + '" alt="' + p.name + '" loading="lazy">'
+        : '<div class="no-photo">' + p.name.charAt(0) + '</div>';
+      const badges = (p.badges || []).map(badge).join(' ');
+      const card = document.createElement('article');
+      card.className = 'card' + (isHero ? ' hero-card' : '');
+      card.innerHTML =
+        '<div class="img-wrap">' + img + '</div>' +
+        '<h3>' + p.name + (badges ? ' <span class="badges">' + badges + '</span>' : '') + '</h3>' +
+        '<p class="desc">' + p.desc + '</p>' +
+        '<div class="meta"><span>' + (p.meta || '').split(',')[0] + '</span><a href="' + mapsUrl + '" target="_blank">Maps →</a></div>';
+      grid.appendChild(card);
+    });
+    main.appendChild(chapter);
+  });
+}
+['All', ...hoodOrder].forEach(h => {
+  const b = document.createElement('button');
+  b.className = 'chip' + (h === 'All' ? ' active' : '');
+  b.textContent = h;
+  b.onclick = () => {
+    active = h;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    b.classList.add('active');
+    render();
+  };
+  filters.appendChild(b);
+});
+render();
+</script>
+</body>
+</html>
