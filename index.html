@@ -21,6 +21,20 @@
   }
   header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
   header .subtitle { margin-top: 6px; opacity: 0.9; font-size: 14px; }
+  header .map-link {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.5);
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 999px;
+    transition: background 0.15s;
+  }
+  header .map-link:hover { background: rgba(255,255,255,0.3); }
   .controls {
     position: sticky;
     top: 0;
@@ -168,6 +182,7 @@
 <header>
   <h1>🍜 Bangkok Food Guide</h1>
   <div class="subtitle">26 spots · real photos from Google Maps · grouped by neighborhood</div>
+  <a class="map-link" href="map.html">🗺️ View on map</a>
 </header>
 
 <div class="controls">
