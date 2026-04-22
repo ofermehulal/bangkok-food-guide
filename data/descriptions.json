@@ -128,5 +128,20 @@
     "hood": "Other",
     "desc": "Comforting Hua Hin–style Thai. Michelin Bib Gourmand 2018–2025. Try the Deep Fried Sun Dried Pork Belly (185฿) and the whole young coconut.",
     "meta": "Bangkok"
+  },
+  "Bamee Kon Sae Lee Thong Lo": {
+    "hood": "Sukhumvit",
+    "desc": "Classic Sino-Thai egg noodle shop — crispy pork, wontons, dry or soup. Cheap, decades old, queues at dinner.",
+    "meta": "Thong Lo / Sukhumvit Soi 55"
+  },
+  "Kim Jeong Grill": {
+    "hood": "Sukhumvit",
+    "desc": "Korean BBQ done right — marbled wagyu, banchan, the full smoky table-grill experience. Book ahead.",
+    "meta": "21 Sukhumvit 61, Watthana (Ekkamai)"
+  },
+  "Jodd Fairs Ratchada": {
+    "hood": "Other",
+    "desc": "Huge open-air night market for street-food grazing. Go hungry — volcano pork ribs, seafood, hundreds of stalls.",
+    "meta": "Rama IX, Huai Khwang (MRT Thailand Cultural Centre)"
   }
 }
