@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Save to Google Maps list — helper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;1,500&family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1220;
+    --panel: #1e2236;
+    --ink: #f5f1e8;
+    --mute: #8a8faa;
+    --dim: #5a5f7a;
+    --hair: rgba(255,255,255,0.08);
+    --red: #ff4d3d;
+    --green: #4dd89e;
+    --yellow: #ffd23f;
+    --display: 'Fraunces', Georgia, serif;
+    --sans: 'Inter', -apple-system, system-ui, sans-serif;
+    --mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: var(--sans); line-height: 1.5;
+    padding: 24px 20px 80px;
+  }
+  .shell { max-width: 640px; margin: 0 auto; }
+  .kicker {
+    font-family: var(--mono); font-size: 11px; color: var(--yellow);
+    letter-spacing: 2px; text-transform: uppercase; font-weight: 700;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: var(--display); font-weight: 500;
+    font-size: 40px; line-height: 1; letter-spacing: -1.2px;
+    margin-bottom: 8px;
+  }
+  h1 em { font-style: italic; color: var(--red); }
+  .sub {
+    font-family: var(--mono); font-size: 12px; color: var(--mute);
+    letter-spacing: 0.5px; margin-bottom: 20px;
+  }
+  .instructions {
+    background: var(--panel);
+    border-left: 3px solid var(--red);
+    padding: 14px 18px; margin: 0 0 24px;
+    font-size: 14px;
+  }
+  .instructions ol { margin: 8px 0 0 20px; font-size: 13.5px; color: #d4d0c4; }
+  .instructions li { margin-bottom: 4px; }
+  .progress {
+    position: sticky; top: 0;
+    background: var(--bg);
+    padding: 10px 0; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 14px;
+    border-bottom: 1px solid var(--hair);
+    z-index: 5;
+  }
+  .progress-bar {
+    flex: 1; height: 4px; background: var(--hair); overflow: hidden;
+    border-radius: 2px;
+  }
+  .progress-bar .fill {
+    height: 100%; background: var(--green);
+    transition: width 0.25s ease;
+  }
+  .progress .count {
+    font-family: var(--mono); font-size: 12px; color: var(--mute);
+    letter-spacing: 0.5px; white-space: nowrap;
+  }
+  .progress .count strong { color: var(--green); }
+  .progress .reset {
+    font-family: var(--mono); font-size: 10px; color: var(--dim);
+    background: transparent; border: 1px solid var(--hair);
+    padding: 4px 10px; border-radius: 2px; cursor: pointer;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .progress .reset:hover { color: var(--mute); border-color: var(--mute); }
+  .hood-group { margin-top: 24px; }
+  .hood-label {
+    font-family: var(--mono); font-size: 10px; color: var(--yellow);
+    letter-spacing: 2px; text-transform: uppercase; font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 14px; border-bottom: 1px solid var(--hair);
+    transition: opacity 0.15s;
+  }
+  .row.done { opacity: 0.4; }
+  .row.done .link { text-decoration: line-through; text-decoration-color: var(--dim); }
+  .check {
+    width: 22px; height: 22px;
+    border: 1.5px solid var(--mute); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+    background: transparent; padding: 0;
+    transition: all 0.15s;
+  }
+  .check:hover { border-color: var(--green); }
+  .row.done .check {
+    background: var(--green); border-color: var(--green);
+    color: var(--bg);
+  }
+  .check::after { content: ''; font-size: 14px; font-weight: 700; }
+  .row.done .check::after { content: '✓'; }
+  .num {
+    font-family: var(--mono); font-size: 11px; color: var(--dim);
+    letter-spacing: 0.5px; min-width: 24px;
+  }
+  .link {
+    flex: 1;
+    font-family: var(--display); font-weight: 500; font-size: 18px;
+    color: var(--ink); text-decoration: none;
+    letter-spacing: -0.3px;
+  }
+  .link:hover { color: var(--red); }
+  .ext {
+    font-family: var(--mono); font-size: 10px; color: var(--mute);
+    letter-spacing: 1px;
+  }
+  .footer {
+    margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--hair);
+    font-size: 13px; color: var(--mute);
+  }
+  .footer a { color: var(--red); }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="kicker">Save to Google Maps</div>
+  <h1>Add all 29 spots to your <em>Untitled list</em></h1>
+  <div class="sub" id="sub">Click each link → Save → pick "Untitled list"</div>
+
+  <div class="instructions">
+    <strong>How it works:</strong>
+    <ol>
+      <li>Click a place name → opens Google Maps in a new tab.</li>
+      <li>On the place panel, click <strong>Save</strong>, then pick <strong>Untitled list</strong>.</li>
+      <li>Come back here and check the box (saves your progress locally).</li>
+      <li>Do the next one. Rename the list in Maps when all 29 are saved.</li>
+    </ol>
+  </div>
+
+  <div class="progress">
+    <div class="count"><strong id="done">0</strong> / <span id="total">29</span> saved</div>
+    <div class="progress-bar"><div class="fill" id="fill" style="width:0%"></div></div>
+    <button class="reset" id="resetBtn">Reset</button>
+  </div>
+
+  <div id="list"></div>
+
+  <div class="footer">
+    Also: <a href="/">full guide</a> · <a href="/map.html">map</a> · <a href="/picker.html">photo picker</a>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'bkk-save-list-progress';
+let done = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+
+const listEl = document.getElementById('list');
+const doneEl = document.getElementById('done');
+const totalEl = document.getElementById('total');
+const fillEl = document.getElementById('fill');
+
+fetch('data/descriptions.json').then(r => r.json()).then(desc => {
+  // Fetch places list from index.html or reconstruct from descriptions
+  // We use descriptions as source of truth for name + hood
+  const hoodOrder = ["Sukhumvit","Chinatown","Phra Nakhon","Siam / Pathum Wan","Chula / Samyan","Khlong San / Icon Siam","Bang Rak","Airport (BKK)","Other"];
+  const searchMap = {
+    "Saengchai Phochana": "Saengchai Phochana Bangkok",
+    "Pier 21 Food Court (Terminal 21)": "Pier 21 Terminal 21 Bangkok",
+    "Rung Rueang Pork Noodle": "Rung Rueang Pork Noodle Sukhumvit 26",
+    "Wattana Panich": "Wattana Panich Beef Noodle Bangkok",
+    "Phed Mark": "Phed Mark Bangkok",
+    "Baan E-sarn Muangyos": "Baan E-sarn Muangyos Bangkok",
+    "Little Bee Thai Crispy Crepe": "Little Bee Thai Crispy Crepe EmQuartier",
+    "Bamee Kon Sae Lee Thong Lo": "Bamee Kon Sae Lee Thong Lo",
+    "Kim Jeong Grill": "Kim Jeong Grill Bangkok",
+    "Ann Guay Tiew Kua Gai": "Ann Guay Tiew Kua Gai Chinatown Bangkok",
+    "Nai Ek Roll Noodle": "Nai Ek Roll Noodle Yaowarat",
+    "Kuay Jab Mr Joe": "Kuay Jab Mr Joe Bangkok",
+    "Kor Panich (K. Panich)": "Kor Panich Mango Sticky Rice Bangkok",
+    "Thipsamai Pad Thai": "Thipsamai Pad Thai Bangkok",
+    "Original Pad Kra Pao 1993": "Original Pad Kra Pao 1993 Bangkok",
+    "Shu Daxia Hot Pot": "Shu Daxia Hot Pot MBK",
+    "Kam's Roast": "Kams Roast Central World Bangkok",
+    "Jeh O Chula": "Jeh O Chula Bangkok",
+    "Jae Wan": "Jae Wan Bangkok",
+    "Sook Siam Market": "Sook Siam Icon Siam",
+    "Somboon Seafood": "Somboon Seafood Surawong",
+    "Heng Chun Seng": "Heng Chun Seng beef soup Bangkok",
+    "Ginger Farm Kitchen": "Ginger Farm Kitchen Suvarnabhumi",
+    "Kin Kin Seafood": "Kin Kin Seafood Bangkok",
+    "Uncle Liu": "Uncle Liu restaurant Bangkok",
+    "Hia Big 5 Pots": "Hia Big 5 Pots Bangkok",
+    "Good Taste Street Food": "Good Taste Street Food Bangkok",
+    "Lay Lao": "Lay Lao Bangkok",
+    "Jodd Fairs Ratchada": "Jodd Fairs Ratchada Bangkok"
+  };
+
+  const places = Object.keys(desc).map(name => ({
+    name, hood: desc[name].hood,
+    search: searchMap[name] || name + ' Bangkok'
+  }));
+
+  totalEl.textContent = places.length;
+
+  // Group by hood
+  const grouped = {};
+  places.forEach(p => { (grouped[p.hood] = grouped[p.hood] || []).push(p); });
+
+  let idx = 0;
+  hoodOrder.forEach(h => {
+    if (!grouped[h]) return;
+    const section = document.createElement('div');
+    section.className = 'hood-group';
+    section.innerHTML = '<div class="hood-label">' + h + '</div>';
+    grouped[h].forEach(p => {
+      idx++;
+      const n = String(idx).padStart(2, '0');
+      const url = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.search);
+      const row = document.createElement('div');
+      row.className = 'row' + (done.has(p.name) ? ' done' : '');
+      row.dataset.name = p.name;
+      row.innerHTML =
+        '<button class="check" aria-label="Toggle saved"></button>' +
+        '<span class="num">' + n + '</span>' +
+        '<a class="link" href="' + url + '" target="_blank" rel="noopener">' + p.name + '</a>' +
+        '<span class="ext">↗</span>';
+      section.appendChild(row);
+    });
+    listEl.appendChild(section);
+  });
+
+  updateProgress();
+
+  // Toggle on check click
+  listEl.addEventListener('click', (e) => {
+    const check = e.target.closest('.check');
+    if (!check) return;
+    const row = check.closest('.row');
+    const name = row.dataset.name;
+    if (done.has(name)) done.delete(name);
+    else done.add(name);
+    row.classList.toggle('done');
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...done]));
+    updateProgress();
+  });
+});
+
+document.getElementById('resetBtn').onclick = () => {
+  if (confirm('Reset all progress?')) {
+    done.clear();
+    localStorage.removeItem(STORAGE_KEY);
+    document.querySelectorAll('.row').forEach(r => r.classList.remove('done'));
+    updateProgress();
+  }
+};
+
+function updateProgress() {
+  const total = parseInt(totalEl.textContent, 10) || 29;
+  doneEl.textContent = done.size;
+  fillEl.style.width = ((done.size / total) * 100) + '%';
+}
+</script>
+</body>
+</html>
