@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bangkok itinerary — Apr 28–May 3, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1220;
+    --bg2: #171a2e;
+    --panel: #1e2236;
+    --panel2: #252943;
+    --ink: #f5f1e8;
+    --mute: #8a8faa;
+    --dim: #5a5f7a;
+    --hair: rgba(255,255,255,0.08);
+    --hair-bright: rgba(255,255,255,0.15);
+    --red: #ff4d3d;
+    --green: #4dd89e;
+    --yellow: #ffd23f;
+    --display: 'Fraunces', Georgia, serif;
+    --sans: 'Inter', -apple-system, system-ui, sans-serif;
+    --mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--ink); font-family: var(--sans); }
+  body { line-height: 1.55; padding-bottom: 80px; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+
+  .shell { max-width: 760px; margin: 0 auto; padding: 24px 20px; }
+
+  /* ─── header ──────────────────────────────────────── */
+  header.hero { padding: 12px 0 20px; }
+  .kicker {
+    font-family: var(--mono); font-size: 11px; color: var(--yellow);
+    letter-spacing: 2px; text-transform: uppercase; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  h1.display {
+    font-family: var(--display); font-weight: 500;
+    font-size: 56px; line-height: 0.92; letter-spacing: -2px;
+  }
+  h1.display em { font-style: italic; color: var(--red); font-weight: 500; }
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    font-family: var(--mono); font-size: 12px; color: var(--mute);
+    margin-top: 18px; letter-spacing: 0.5px;
+  }
+  .meta-row strong { color: var(--ink); }
+  .meta-row .sep { color: var(--hair-bright); }
+
+  /* ─── ticker ──────────────────────────────────────── */
+  .ticker {
+    background: var(--red); color: var(--bg);
+    padding: 10px 14px; border-radius: 4px;
+    margin: 18px 0 22px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.8px;
+    text-transform: uppercase; font-weight: 700;
+    display: flex; gap: 10px; align-items: center;
+  }
+
+  /* ─── nav strip ──────────────────────────────────── */
+  .day-nav {
+    display: flex; gap: 6px; overflow-x: auto;
+    padding-bottom: 12px; margin-bottom: 18px;
+    border-bottom: 1px solid var(--hair);
+    scrollbar-width: none;
+    position: sticky; top: 0; z-index: 5;
+    background: linear-gradient(to bottom, var(--bg) 80%, rgba(15,18,32,0.95));
+    padding-top: 6px;
+  }
+  .day-nav::-webkit-scrollbar { display: none; }
+  .day-nav a {
+    flex-shrink: 0; padding: 7px 13px; border-radius: 2px;
+    border: 1px solid var(--hair); background: transparent;
+    color: var(--mute); font-family: var(--mono);
+    font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    font-weight: 700; text-decoration: none;
+  }
+  .day-nav a:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* ─── day section ────────────────────────────────── */
+  .day { margin-top: 32px; scroll-margin-top: 90px; }
+  .day-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 14px; padding-bottom: 12px; margin-bottom: 16px;
+    border-bottom: 2px solid var(--hair);
+  }
+  .day-title {
+    font-family: var(--display); font-weight: 500;
+    font-size: 32px; line-height: 1; letter-spacing: -1px;
+  }
+  .day-title em { font-style: italic; color: var(--red); }
+  .day-num {
+    font-family: var(--mono); font-size: 11px; color: var(--yellow);
+    letter-spacing: 2px; text-transform: uppercase; font-weight: 700;
+    white-space: nowrap;
+  }
+  .day-tagline {
+    font-family: var(--display); font-style: italic;
+    font-size: 17px; color: var(--mute);
+    margin: -10px 0 18px;
+  }
+
+  /* ─── timeline ──────────────────────────────────── */
+  .slot {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--hair);
+    align-items: start;
+  }
+  .slot:last-child { border-bottom: none; }
+  .slot .time {
+    font-family: var(--mono); font-size: 10px; color: var(--yellow);
+    letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700;
+    padding-top: 3px;
+  }
+  .slot .body { padding-left: 0; }
+  .slot .name {
+    font-family: var(--display); font-weight: 500;
+    font-size: 19px; line-height: 1.1; letter-spacing: -0.3px;
+    color: var(--ink);
+    text-decoration: none;
+    display: inline-block;
+  }
+  .slot a.name:hover { color: var(--red); }
+  .slot a.name::after { content: ' ↗'; color: var(--mute); font-size: 13px; font-family: var(--sans); }
+  .slot .desc {
+    font-size: 13.5px; color: #c8c8c8;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .slot .meta {
+    font-family: var(--mono); font-size: 10px; color: var(--mute);
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-top: 6px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  }
+  .slot .meta .sep { color: var(--hair-bright); }
+  .slot .meta .hood {
+    color: var(--ink); font-weight: 700;
+  }
+  .slot .alt {
+    margin-top: 6px; padding: 8px 10px;
+    background: var(--panel); border-left: 2px solid var(--yellow);
+    font-size: 12.5px; color: var(--mute); line-height: 1.5;
+  }
+  .slot .alt strong { color: var(--yellow); font-family: var(--mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* tag pills (right-aligned in slot body) */
+  .tags { display: inline-flex; gap: 5px; margin-left: 8px; vertical-align: middle; }
+  .tag {
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 999px;
+  }
+  .tag.michelin { background: var(--yellow); color: var(--bg); }
+  .tag.must { background: var(--red); color: white; }
+  .tag.activity { background: var(--green); color: var(--bg); }
+
+  /* day notes */
+  .day-note {
+    margin-top: 18px;
+    padding: 12px 14px;
+    background: var(--panel);
+    border-left: 3px solid var(--red);
+    font-size: 13px; color: #d4d0c4;
+    line-height: 1.55;
+  }
+  .day-note strong {
+    color: var(--yellow); font-family: var(--mono); font-size: 11px;
+    letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 4px;
+  }
+
+  /* ─── alts section ──────────────────────────────── */
+  .alts-section {
+    margin-top: 48px;
+    padding: 20px 18px;
+    background: var(--panel);
+    border-left: 3px solid var(--yellow);
+  }
+  .alts-section h2 {
+    font-family: var(--display); font-weight: 500;
+    font-size: 22px; letter-spacing: -0.3px;
+    margin-bottom: 12px;
+  }
+  .alts-section p { font-size: 13.5px; color: var(--mute); margin-bottom: 12px; }
+  .alts-section ul { list-style: none; }
+  .alts-section li {
+    padding: 8px 0; border-bottom: 1px solid var(--hair);
+    font-size: 13px; color: #d4d0c4;
+  }
+  .alts-section li:last-child { border-bottom: none; }
+  .alts-section li strong { color: var(--ink); font-family: var(--display); font-weight: 500; font-size: 15px; }
+
+  /* footer */
+  .footer {
+    margin-top: 48px; padding-top: 20px;
+    border-top: 1px solid var(--hair);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+    font-family: var(--mono); font-size: 11px; color: var(--mute);
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .footer a { color: var(--red); text-decoration: none; font-weight: 700; }
+  .footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 600px) {
+    .shell { padding: 18px 16px; }
+    h1.display { font-size: 42px; letter-spacing: -1.5px; }
+    .day-title { font-size: 26px; }
+    .slot { grid-template-columns: 64px 1fr; gap: 10px; }
+    .slot .name { font-size: 17px; }
+  }
+
+  @media print {
+    body { background: white; color: black; }
+    .day-nav, .ticker, .footer { display: none; }
+    .day { page-break-inside: avoid; }
+    a { color: black; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header class="hero">
+  <div class="kicker">/ Itinerary · Bangkok · 6 days</div>
+  <h1 class="display">Six days of <em>eating</em><br>across Krung Thep.</h1>
+  <div class="meta-row">
+    <span><strong>Apr 28 – May 3, 2026</strong></span>
+    <span class="sep">│</span>
+    <span>5 nights · 2 travelers</span>
+    <span class="sep">│</span>
+    <span>📍 <strong>Rosewood Bangkok</strong> · Phloen Chit</span>
+  </div>
+</header>
+
+<div class="ticker">
+  <strong>◉ NOW</strong>
+  <span>Day-by-day plan with backup picks. Tap names to open in Maps.</span>
+</div>
+
+<nav class="day-nav">
+  <a href="#tue">Tue · Arrive</a>
+  <a href="#wed">Wed · Old City</a>
+  <a href="#thu">Thu · Sukhumvit</a>
+  <a href="#fri">Fri · River</a>
+  <a href="#sat">Sat · Markets</a>
+  <a href="#sun">Sun · Depart</a>
+</nav>
+
+<!-- ───────── TUE ───────── -->
+<section class="day" id="tue">
+  <div class="day-header">
+    <div class="day-title">Tue, Apr 28 — <em>Arrival</em></div>
+    <div class="day-num">Day 1 / 6</div>
+  </div>
+  <div class="day-tagline">Decompress. Eat soft. Sleep early.</div>
+
+  <div class="slot">
+    <div class="time">~11am</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Ginger+Farm+Kitchen+Suvarnabhumi">Ginger Farm Kitchen</a>
+      <span class="tags"><span class="tag michelin">Michelin Bib</span></span>
+      <div class="desc">Farm-to-city Thai, zero MSG. Arrival meal at the airport before the cab to the hotel.</div>
+      <div class="meta"><span class="hood">Suvarnabhumi Airport</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">1pm</div>
+    <div class="body">
+      <a class="name" href="https://maps.app.goo.gl/?q=Rosewood+Bangkok">Rosewood Bangkok</a>
+      <div class="desc">Check in, nap, light unpack. Walk in Lumpini Park if energy allows.</div>
+      <div class="meta"><span class="hood">Phloen Chit</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">7pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Din+Tai+Fung+Central+Embassy">Din Tai Fung — Central Embassy</a>
+      <div class="desc">Xiao long bao + truffle dumplings. Literally across the street from the hotel — the easiest, lowest-friction first dinner.</div>
+      <div class="meta"><span class="hood">Phloen Chit · 200 m walk</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">9:30pm</div>
+    <div class="body">
+      <span class="name">Drinks @ hotel bar</span>
+      <div class="desc">Lennon's Bar at Rosewood, or down to BAR.YARD nearby. Don't push it — tomorrow is a big food day.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── WED ───────── -->
+<section class="day" id="wed">
+  <div class="day-header">
+    <div class="day-title">Wed, Apr 29 — <em>Old City + Yaowarat crawl</em></div>
+    <div class="day-num">Day 2 / 6</div>
+  </div>
+  <div class="day-tagline">Temples by day, noodle pilgrimage by night.</div>
+
+  <div class="slot">
+    <div class="time">9:30am</div>
+    <div class="body">
+      <span class="name">Wat Pho + Grand Palace</span>
+      <span class="tags"><span class="tag activity">Activity</span></span>
+      <div class="desc">Reclining Buddha at Wat Pho first (less crowded), then Grand Palace. Dress code: covered shoulders + knees.</div>
+      <div class="meta"><span class="hood">Phra Nakhon</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">11:30am</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Kor+Panich+Mango+Sticky+Rice+Bangkok">Kor Panich (K. Panich)</a>
+      <span class="tags"><span class="tag michelin">Michelin Bib</span></span>
+      <div class="desc">Legendary mango sticky rice — ฿130. 7 years in the Guide. Eat it walking.</div>
+      <div class="meta"><span class="hood">Phra Nakhon</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">1pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Khao+Gaeng+Jek+Pui+Bangkok">Khao Gaeng Jek Pui (Je Chie)</a>
+      <div class="desc">Curry-on-rice, eaten sitting on small plastic stools at the curb. Pure Bangkok.</div>
+      <div class="meta"><span class="hood">Yaowarat-side</span></div>
+      <div class="alt"><strong>Alt</strong> · Or split lunch with <a href="https://www.google.com/maps/search/?api=1&query=Original+Pad+Kra+Pao+1993+Bangkok" style="color:var(--ink)">Original Pad Kra Pao 1993</a> — classic stir-fry, ฿70. Comfort food if Jek Pui feels too gritty.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">3pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Wat+Mangkon+Bangkok">Wat Mangkon</a>
+      <span class="tags"><span class="tag activity">Activity</span></span>
+      <div class="desc">Bangkok's biggest Chinese Buddhist temple — incense-thick, gold-everywhere. Walk over to Nang Loeng Market afterwards.</div>
+      <div class="meta"><span class="hood">Chinatown</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">5:30pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Thipsamai+Pad+Thai+Bangkok">Thipsamai Pad Thai</a>
+      <span class="tags"><span class="tag michelin">Michelin Bib</span><span class="tag must">Must</span></span>
+      <div class="desc">The most famous pad thai in Thailand. Order the <em>Pad Thai Song-Kreung</em> (ultimate version with prawn oil). Go before 6pm — queues turn brutal.</div>
+      <div class="meta"><span class="hood">Phra Nakhon</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">7:30pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Ann+Guay+Tiew+Kua+Gai+Chinatown+Bangkok">Ann Guay Tiew Kua Gai</a>
+      <span class="tags"><span class="tag michelin">Michelin Bib</span></span>
+      <div class="desc">Fried rice noodles with chicken and egg, ฿60. 5 yrs in the Guide. Yaowarat lights up around now.</div>
+      <div class="meta"><span class="hood">Yaowarat</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">8:30pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Hia+Big+5+Pots+Bangkok">Hia Big 5 Pots</a>
+      <div class="desc">Pork wontons — small bowl, share between two. Local favorite, palate cleanser between bigger plates.</div>
+      <div class="meta"><span class="hood">Yaowarat</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">9:30pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Nai+Ek+Roll+Noodle+Yaowarat">Nai Ek Roll Noodle</a>
+      <span class="tags"><span class="tag michelin">Michelin Bib</span></span>
+      <div class="desc">Clear Chinese pork noodle soup with crispy pork belly, ฿100. The iconic Yaowarat bowl. End on this.</div>
+      <div class="meta"><span class="hood">Yaowarat</span></div>
+    </div>
+  </div>
+
+  <div class="day-note">
+    <strong>Pacing tip</strong>
+    Four food stops on a Yaowarat crawl is a lot. Order ONE item per place, share, walk between stops. If full, drop Hia Big 5 first (Nai Ek is the must-keep).
+  </div>
+</section>
+
+<!-- ───────── THU ───────── -->
+<section class="day" id="thu">
+  <div class="day-header">
+    <div class="day-title">Thu, Apr 30 — <em>Sukhumvit deep dive</em></div>
+    <div class="day-num">Day 3 / 6</div>
+  </div>
+  <div class="day-tagline">BTS hop, classic noodles, Korean grill, optional fights.</div>
+
+  <div class="slot">
+    <div class="time">10am</div>
+    <div class="body">
+      <span class="name">Hotel breakfast + slow morning</span>
+      <div class="desc">Or coffee at Roast (EmQuartier) for the people-watch.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">11:30am</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Little+Bee+Thai+Crispy+Crepe+EmQuartier">Little Bee Thai Crispy Crepe</a>
+      <span class="tags"><span class="tag michelin">Michelin Bib</span></span>
+      <div class="desc">Khanom buang (Thai crispy crepes), made-to-order. Try the Sweet Golden Egg Yolk Threads. Snack-sized, eat 2 between you.</div>
+      <div class="meta"><span class="hood">EmQuartier · BTS Phrom Phong</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">1pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Wattana+Panich+Beef+Noodle+Bangkok">Wattana Panich</a>
+      <span class="tags"><span class="tag michelin">Michelin Bib</span><span class="tag must">Must</span></span>
+      <div class="desc">40-year simmered Chinese-style beef noodle broth, ฿100. One of Bangkok's most iconic bowls. <em>Closes early evening — lunch is safer.</em></div>
+      <div class="meta"><span class="hood">Ekkamai (Sukhumvit 63)</span></div>
+      <div class="alt"><strong>Alt</strong> · If closed: <a href="https://www.google.com/maps/search/?api=1&query=Rung+Rueang+Pork+Noodle+Sukhumvit+26" style="color:var(--ink)">Rung Rueang Pork Noodle</a> (Sukhumvit 26, also Michelin Bib).</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">3pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Vana+Spa+Sukhumvit+24">Vana Spa (Sukhumvit 24)</a>
+      <span class="tags"><span class="tag activity">Activity</span></span>
+      <div class="desc">90-min Thai massage. Reset before the evening's eating.</div>
+      <div class="meta"><span class="hood">Sukhumvit 24</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">5pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Bamee+Kon+Sae+Lee+Thong+Lo">Bamee Kon Sae Lee Thong Lo</a>
+      <div class="desc">Snack-sized: a small bowl of crispy-pork egg noodles to bridge to dinner. Cheap, fast, queues at peak.</div>
+      <div class="meta"><span class="hood">Thong Lo · Sukhumvit Soi 55</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">7pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Kim+Jeong+Grill+Bangkok">Kim Jeong Grill</a>
+      <span class="tags"><span class="tag must">Must</span></span>
+      <div class="desc">Korean BBQ done right — marbled wagyu, full banchan spread, smoky table grill. <strong>Book ahead.</strong></div>
+      <div class="meta"><span class="hood">Sukhumvit 61 · Ekkamai</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">9:30pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Rajadamnern+Muay+Thai+Stadium">Rajadamnern Muay Thai Stadium</a>
+      <span class="tags"><span class="tag activity">Activity</span></span>
+      <div class="desc">Thursday is a fight night. Buy tickets at the door or online. ~3 hr of bouts. Cab back to hotel after.</div>
+      <div class="meta"><span class="hood">Phra Nakhon · 25 min cab</span></div>
+      <div class="alt"><strong>Alt</strong> · Skip fights and instead: rooftop drinks at Sky on 20 (NOVOTEL Sukhumvit 20).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── FRI ───────── -->
+<section class="day" id="fri">
+  <div class="day-header">
+    <div class="day-title">Fri, May 1 — <em>River + curry crab</em></div>
+    <div class="day-num">Day 4 / 6</div>
+  </div>
+  <div class="day-tagline">Ferry, mall, sunset, the most famous crab dish in town.</div>
+
+  <div class="day-note">
+    <strong>Heads up</strong>
+    May 1 is Labor Day in Thailand. Most malls & restaurants stay open; some local shops close. Confirm Wattana Panich-style spots before going.
+  </div>
+
+  <div class="slot">
+    <div class="time">10am</div>
+    <div class="body">
+      <span class="name">Sathorn Pier → ferry across to Icon Siam</span>
+      <span class="tags"><span class="tag activity">Activity</span></span>
+      <div class="desc">Free shuttle ferry. ~10 min. Iconic river views.</div>
+      <div class="meta"><span class="hood">Bang Rak / Khlong San</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">11:30am</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Sook+Siam+Icon+Siam">Sook Siam Market</a>
+      <div class="desc">Indoor regional Thai food court inside Icon Siam — giant river prawns, charcoal grilled meats, Northeastern stalls. Graze for lunch.</div>
+      <div class="meta"><span class="hood">Icon Siam</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">2pm</div>
+    <div class="body">
+      <span class="name">Icon Siam wander / cross back to Bang Rak</span>
+      <div class="desc">Hotel reset OR continue along Bang Rak's lanes — old shophouses, gold shops, brand-new condos all stacked together.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">4pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Sharon+Thai+Massage+Bangkok">Sharon Thai Massage</a>
+      <span class="tags"><span class="tag activity">Activity</span></span>
+      <div class="desc">Quick 60-min — pre-rooftop reset.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">5:30pm</div>
+    <div class="body">
+      <span class="name">Sunset rooftop — Lebua Sky Bar (or Vertigo)</span>
+      <span class="tags"><span class="tag activity">Activity</span></span>
+      <div class="desc">Touristy, but the view delivers. Sky Bar = the Hangover 2 bar; Vertigo at Banyan Tree is quieter.</div>
+      <div class="meta"><span class="hood">Bang Rak / Sathorn</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">7:30pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Somboon+Seafood+Surawong">Somboon Seafood</a>
+      <span class="tags"><span class="tag must">Must</span></span>
+      <div class="desc">Bangkok's most famous curry crab (<em>pu phad pong karee</em>). Tourist-heavy but the crab is legit.</div>
+      <div class="meta"><span class="hood">Surawong (Bang Rak)</span></div>
+      <div class="alt"><strong>Alt</strong> · Want laid-back instead of touristy? Swap to <a href="https://www.google.com/maps/search/?api=1&query=Lay+Lao+Bangkok" style="color:var(--ink)">Lay Lao</a> (Hua Hin–style Thai, Michelin Bib).</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">10pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Heng+Chun+Seng+beef+soup+Bangkok">Heng Chun Seng</a>
+      <div class="desc">Best beef soup in Bangkok if there's any room left. Otherwise call it a night.</div>
+      <div class="meta"><span class="hood">Bang Rak</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── SAT ───────── -->
+<section class="day" id="sat">
+  <div class="day-header">
+    <div class="day-title">Sat, May 2 — <em>Markets &amp; nightlife</em></div>
+    <div class="day-num">Day 5 / 6</div>
+  </div>
+  <div class="day-tagline">Big day. Pace yourself. Hydrate.</div>
+
+  <div class="slot">
+    <div class="time">9am</div>
+    <div class="body">
+      <span class="name">Chatuchak Weekend Market</span>
+      <span class="tags"><span class="tag activity">Activity</span><span class="tag must">Sat-only</span></span>
+      <div class="desc">15,000 stalls. Go early before heat. Sections 7, 8 (vintage), 26 (art), and food court J.</div>
+      <div class="meta"><span class="hood">Chatuchak · MRT Kamphaeng Phet</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">12pm</div>
+    <div class="body">
+      <span class="name">Lunch in Chatuchak</span>
+      <div class="desc">Coconut ice cream, boat noodles, grilled pork skewers — graze. Don't sit down for a real meal, save room.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">3pm</div>
+    <div class="body">
+      <span class="name">Hotel pool reset</span>
+      <div class="desc">OR <a href="https://www.google.com/maps/search/?api=1&query=Topkart+Bangkok" style="color:var(--ink)">Topkart Bangkok</a> if you want a daytime activity.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">5:30pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Phed+Mark+Bangkok">Phed Mark</a>
+      <span class="tags"><span class="tag must">Must</span></span>
+      <div class="desc">Mark Wiens' restaurant. <em>Very</em> spicy pad krapao — order the heat level you can handle. Pre-Jodd Fairs warm-up.</div>
+      <div class="meta"><span class="hood">Ekkamai</span></div>
+      <div class="alt"><strong>Alt</strong> · Spice-averse? Swap for <a href="https://www.google.com/maps/search/?api=1&query=Original+Pad+Kra+Pao+1993+Bangkok" style="color:var(--ink)">Original Pad Kra Pao 1993</a> — classic, gentler version.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">7pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Jodd+Fairs+Ratchada+Bangkok">Jodd Fairs Ratchada</a>
+      <span class="tags"><span class="tag must">Must</span></span>
+      <div class="desc">Open-air night market — go hungry. Volcano pork ribs, seafood stalls, drinks, DJs. Easy 3-hour wander.</div>
+      <div class="meta"><span class="hood">Ratchada · MRT Thailand Cultural Centre</span></div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">10:30pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Jeh+O+Chula+Bangkok">Jeh O Chula</a>
+      <span class="tags"><span class="tag must">Must</span></span>
+      <div class="desc">Legendary late-night Mama tom yum noodles. Expect a queue. The Bangkok midnight bowl.</div>
+      <div class="meta"><span class="hood">Chula / Samyan</span></div>
+      <div class="alt"><strong>Alt</strong> · Don't want to queue? <a href="https://www.google.com/maps/search/?api=1&query=Kin+Kin+Seafood+Bangkok" style="color:var(--ink)">Kin Kin Seafood</a> serves the same dish, pricier, no line.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── SUN ───────── -->
+<section class="day" id="sun">
+  <div class="day-header">
+    <div class="day-title">Sun, May 3 — <em>Slow farewell</em></div>
+    <div class="day-num">Day 6 / 6</div>
+  </div>
+  <div class="day-tagline">Pack, brunch, last walks, leave.</div>
+
+  <div class="slot">
+    <div class="time">9am</div>
+    <div class="body">
+      <span class="name">Hotel breakfast</span>
+      <div class="desc">Take it slow. Pack between bites.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">11am</div>
+    <div class="body">
+      <span class="name">Last walk — EmDistrict</span>
+      <div class="desc">Final shopping. Stop at OWNDAYS for eyewear if you've earmarked that.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">12:30pm</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=PST+Bangkok+Pizza+Studio+Tamaki">PST Bangkok (Pizza Studio Tamaki)</a>
+      <div class="desc">Tokyo-import wood-fired pizza. A break from Thai food before the long flight.</div>
+      <div class="meta"><span class="hood">Sukhumvit</span></div>
+      <div class="alt"><strong>Alt</strong> · Burgers? <a href="https://www.google.com/maps/search/?api=1&query=No+Drama+Burger+Bangkok" style="color:var(--ink)">No Drama Burger</a>.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">2:30pm</div>
+    <div class="body">
+      <span class="name">60-min last massage</span>
+      <span class="tags"><span class="tag activity">Activity</span></span>
+      <div class="desc">Anywhere convenient. Then back to the hotel for final check-out.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">5pm</div>
+    <div class="body">
+      <span class="name">Cab to Suvarnabhumi</span>
+      <div class="desc">~45 min in light traffic, longer at rush. Leave 3 hr before flight to be safe.</div>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="time">at airport</div>
+    <div class="body">
+      <a class="name" href="https://www.google.com/maps/search/?api=1&query=Ginger+Farm+Kitchen+Suvarnabhumi">Ginger Farm Kitchen</a>
+      <div class="desc">If you didn't do this on Day 1, it's the perfect last meal — clean, calm, properly Thai.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── ALTS ───────── -->
+<section class="alts-section">
+  <h2>Backup picks</h2>
+  <p>Solid spots not in the main plan. Use as swaps if anything's closed, queues are insane, or the appetite shifts.</p>
+  <ul>
+    <li><strong>Saengchai Phochana</strong> — Khlong Toei seafood, late-night. Swap for Somboon if you want grittier/cheaper.</li>
+    <li><strong>Pier 21 Food Court</strong> — Terminal 21 mall. Bulletproof when tired. 5 min from hotel.</li>
+    <li><strong>Rung Rueang Pork Noodle</strong> — Sukhumvit Soi 26, Michelin Bib. Backup if Wattana Panich is closed.</li>
+    <li><strong>Baan E-sarn Muangyos</strong> — Isaan + beers. For a chill "long dinner" night.</li>
+    <li><strong>Kuay Jab Mr Joe</strong> — Yaowarat. Peppery rolled rice noodle. Swap for Ann or Nai Ek.</li>
+    <li><strong>Kam's Roast</strong> — CentralWorld, 1 Michelin star. Swap if you want roast duck Sat lunch.</li>
+    <li><strong>Lay Lao</strong> — Hua Hin–style Thai, Michelin Bib 2018–2025. Swap for Somboon Friday.</li>
+    <li><strong>Jae Wan</strong> — Chula comfort food. Lunch swap if you're near Sam Yan.</li>
+    <li><strong>Lim Lao Ngow Fishball Noodle</strong> — Yaowarat. Old-school fishballs. Swap for Hia Big 5.</li>
+    <li><strong>Lung Cheay Egg Noodles</strong> — backup if Bamee is closed.</li>
+    <li><strong>Good Taste Street Food</strong> — closer-to-hotel pad krapao backup.</li>
+    <li><strong>Uncle Liu</strong> — hidden Thai-Chinese stir-fry spot. Hard to find — skip unless you have the exact location.</li>
+  </ul>
+</section>
+
+<div class="footer">
+  <span>Bangkok itinerary · v1 · Apr 27 2026</span>
+  <span><a href="/">← back to guide</a> · <a href="/map.html">map</a></span>
+</div>
+
+</div>
+</body>
+</html>
