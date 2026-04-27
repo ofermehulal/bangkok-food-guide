@@ -703,5 +703,13 @@
 </div>
 
 </div>
+
+<script>
+  // Open all Google Maps links in a new tab
+  document.querySelectorAll('a[href*="google.com/maps"], a[href*="maps.app.goo.gl"]').forEach(a => {
+    a.target = '_blank';
+    a.rel = 'noopener';
+  });
+</script>
 </body>
 </html>
